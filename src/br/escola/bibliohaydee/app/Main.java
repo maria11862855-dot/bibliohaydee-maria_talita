@@ -1,24 +1,32 @@
 package br.escola.bibliohaydee.app;
 import br.escola.bibliohaydee.model.Autor;
 import br.escola.bibliohaydee.model.Livro;
+import br.escola.bibliohaydee.model.Usuario;
+
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.ArrayList;
+
 
 public class Main {
     public static void main(String[] args) {
 
+
         List<Autor> autores = new ArrayList<>();
         List<Livro> livros = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
+
 
         Autor autor = new Autor();
         autor.setNome("Machado de Assis");
         autor.setNacionalidade("Brasileiro");
         autor.setAnoNascimento(1839);
 
+
         autores.add(autor);
+
 
         Livro livro = new Livro(
                 "Dom Casmurro",
@@ -34,17 +42,23 @@ public class Main {
                 1899
         );
 
+
         System.out.println("Gênero do livro: " + livroSemGenero.getGenero());
+
 
         livros.add(livro);
 
+
         System.out.println("===== AUTORES =====");
+
 
         for (Autor a : autores) {
             System.out.println(a);
         }
 
+
         System.out.println("\n===== ACERVO =====");
+
 
         if (livros.isEmpty()) {
             System.out.println("O acervo está vazio.");
@@ -55,13 +69,19 @@ public class Main {
         }
 
 
+
+
         List<Usuario> usuarios = new ArrayList<>();
         String nome;
+
+
 
 
         do {
             System.out.print("\nDigite o nome: ");
             nome = scanner.nextLine();
+
+
 
 
             if (nome.trim().isEmpty()) {
@@ -71,11 +91,17 @@ public class Main {
         } while (nome.trim().isEmpty());
 
 
+
+
         System.out.print("Digite a matrícula: ");
         String matricula = scanner.nextLine();
 
 
+
+
         String tipo;
+
+
 
 
         do {
@@ -83,7 +109,11 @@ public class Main {
                     "Digite o tipo (ALUNO ou PROFESSOR): ");
 
 
+
+
             tipo = scanner.nextLine().trim().toUpperCase();
+
+
 
 
             if (!tipo.equals("ALUNO")
@@ -95,21 +125,29 @@ public class Main {
                 && !tipo.equals("PROFESSOR"));
 
 
+
+
         System.out.print("Definir o limite? (S/N): ");
         String resposta = scanner.nextLine().trim().toUpperCase();
 
+
         Usuario usuario;
+
 
         if (resposta.equals("S")) {
             System.out.print("Digite o limite de empréstimos: ");
             Integer limite = Integer.parseInt(scanner.nextLine());
+
 
             usuario = new Usuario(nome, matricula, tipo, limite);
         } else {
             usuario = new Usuario(nome, matricula, tipo);
         }
 
+
         usuarios.add(usuario);
+
+
 
 
         System.out.println("\nUsuário cadastrado com sucesso!");
@@ -121,10 +159,13 @@ public class Main {
         System.out.println("Empréstimos ativos: "
                 + usuario.getEmprestimosAtivos());
 
+
         System.out.print("\nDigite a matrícula do usuário que deseja atualizar: ");
         String matriculaBusca = scanner.nextLine();
 
+
         Usuario usuarioEncontrado = buscarUsuario(usuarios, matriculaBusca);
+
 
         if (usuarioEncontrado == null) {
             System.out.println("Usuário não localizado. Nenhuma alteração feita.");
@@ -135,16 +176,20 @@ public class Main {
             System.out.println("Tipo: " + usuarioEncontrado.getTipo());
             System.out.println("Limite: " + usuarioEncontrado.getLimiteEmprestimos());
 
+
             System.out.println("\nO que deseja atualizar?");
             System.out.println("1 - Nome");
             System.out.println("2 - Limite de empréstimos");
             System.out.print("Escolha: ");
 
+
             String opcao = scanner.nextLine();
+
 
             if (opcao.equals("1")) {
                 System.out.print("Digite o novo nome: ");
                 String novoNome = scanner.nextLine();
+
 
                 if (usuarioEncontrado.setNome(novoNome)) {
                     System.out.println("Nome atualizado com sucesso!");
@@ -152,12 +197,15 @@ public class Main {
                     System.out.println("Nome inválido. Nenhuma alteração feita.");
                 }
 
+
             } else if (opcao.equals("2")) {
                 System.out.print("Digite o novo limite: ");
                 String entradaLimite = scanner.nextLine();
 
+
                 try {
                     int novoLimite = Integer.parseInt(entradaLimite);
+
 
                     if (usuarioEncontrado.setLimiteEmprestimos(novoLimite)) {
                         System.out.println("Limite atualizado com sucesso!");
@@ -165,39 +213,30 @@ public class Main {
                         System.out.println("Limite inválido. Nenhuma alteração feita.");
                     }
 
+
                 } catch (NumberFormatException e) {
                     System.out.println("Digite um número válido. Nenhuma alteração feita.");
                 }
+
 
             } else {
                 System.out.println("Opção inválida. Nenhuma alteração feita.");
             }
         }
-        List<Usuario> usuarios = new ArrayList<>();
 
 
 
-            String nome;
 
-            do {
-                System.out.print("\nDigite o nome: ");
-                nome = scanner.nextLine();
+        scanner.close();
+    }
+    public static Usuario buscarUsuario(List<Usuario> usuarios, String matricula) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getMatricula().equals(matricula)) {
+                return usuario;
+            }
+        }
 
-                if (nome.trim().isEmpty()) {
-                    System.out.println(
-                            "O nome não pode ser vazio.");
-                }
-            } while (nome.trim().isEmpty());
 
-            System.out.print("Digite a matrícula: ");
-            String matricula = scanner.nextLine();
-
-            String tipo;
-
-            do {
-                System.out.print(
-                        "Digite o tipo (ALUNO ou PROFESSOR): ");
-
-                tipo = scanner.nextLine().trim().toUpperCase();
-
+        return null;
+    }
 }

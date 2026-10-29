@@ -58,7 +58,7 @@ public class Usuario {
     }
 
     public static boolean limiteValido(int limite) {
-        return limite >= 1;
+        return limite >= 5;
     }
     public boolean setNome(String nome) {
         if (!nomeValido(nome)) {

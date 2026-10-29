@@ -40,6 +40,3 @@ public class Autor {
               ", anoNascimento=" + anoNascimento;
    }
 }
-
-
-

@@ -1,6 +1,7 @@
 package br.escola.bibliohaydee.app;
 import br.escola.bibliohaydee.model.Autor;
 import br.escola.bibliohaydee.model.Livro;
+import br.escola.bibliohaydee.model.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,15 +55,12 @@ public class Main {
             }
         }
 
-
         List<Usuario> usuarios = new ArrayList<>();
         String nome;
-
 
         do {
             System.out.print("\nDigite o nome: ");
             nome = scanner.nextLine();
-
 
             if (nome.trim().isEmpty()) {
                 System.out.println(
@@ -70,21 +68,16 @@ public class Main {
             }
         } while (nome.trim().isEmpty());
 
-
         System.out.print("Digite a matrícula: ");
         String matricula = scanner.nextLine();
 
-
         String tipo;
-
 
         do {
             System.out.print(
                     "Digite o tipo (ALUNO ou PROFESSOR): ");
 
-
             tipo = scanner.nextLine().trim().toUpperCase();
-
 
             if (!tipo.equals("ALUNO")
                     && !tipo.equals("PROFESSOR")) {
@@ -93,7 +86,6 @@ public class Main {
             }
         } while (!tipo.equals("ALUNO")
                 && !tipo.equals("PROFESSOR"));
-
 
         System.out.print("Definir o limite? (S/N): ");
         String resposta = scanner.nextLine().trim().toUpperCase();
@@ -104,13 +96,13 @@ public class Main {
             System.out.print("Digite o limite de empréstimos: ");
             Integer limite = Integer.parseInt(scanner.nextLine());
 
+
             usuario = new Usuario(nome, matricula, tipo, limite);
         } else {
             usuario = new Usuario(nome, matricula, tipo);
         }
 
         usuarios.add(usuario);
-
 
         System.out.println("\nUsuário cadastrado com sucesso!");
         System.out.println("Nome: " + usuario.getNome());
@@ -146,18 +138,22 @@ public class Main {
                 System.out.print("Digite o novo nome: ");
                 String novoNome = scanner.nextLine();
 
+
                 if (usuarioEncontrado.setNome(novoNome)) {
                     System.out.println("Nome atualizado com sucesso!");
                 } else {
                     System.out.println("Nome inválido. Nenhuma alteração feita.");
                 }
 
+
             } else if (opcao.equals("2")) {
                 System.out.print("Digite o novo limite: ");
                 String entradaLimite = scanner.nextLine();
 
+
                 try {
                     int novoLimite = Integer.parseInt(entradaLimite);
+
 
                     if (usuarioEncontrado.setLimiteEmprestimos(novoLimite)) {
                         System.out.println("Limite atualizado com sucesso!");
@@ -165,39 +161,26 @@ public class Main {
                         System.out.println("Limite inválido. Nenhuma alteração feita.");
                     }
 
+
                 } catch (NumberFormatException e) {
                     System.out.println("Digite um número válido. Nenhuma alteração feita.");
                 }
+
 
             } else {
                 System.out.println("Opção inválida. Nenhuma alteração feita.");
             }
         }
-        List<Usuario> usuarios = new ArrayList<>();
 
+        scanner.close();
+    }
+    public static Usuario buscarUsuario(List<Usuario> usuarios, String matricula) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getMatricula().equals(matricula)) {
+                return usuario;
+            }
+        }
 
-
-            String nome;
-
-            do {
-                System.out.print("\nDigite o nome: ");
-                nome = scanner.nextLine();
-
-                if (nome.trim().isEmpty()) {
-                    System.out.println(
-                            "O nome não pode ser vazio.");
-                }
-            } while (nome.trim().isEmpty());
-
-            System.out.print("Digite a matrícula: ");
-            String matricula = scanner.nextLine();
-
-            String tipo;
-
-            do {
-                System.out.print(
-                        "Digite o tipo (ALUNO ou PROFESSOR): ");
-
-                tipo = scanner.nextLine().trim().toUpperCase();
-
+        return null;
+    }
 }

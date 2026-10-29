@@ -1,5 +1,6 @@
 package br.escola.bibliohaydee.model;
 
+
 public class Usuario {
     public static final int LIMITE_PADRAO = 3;
     private String nome;
@@ -9,13 +10,12 @@ public class Usuario {
     private Integer emprestimosAtivos = 0;
 
     public Usuario(String nomeInformado, String matriculaInformada,
-                   String tipoInformado, Integer limiteInformado)
-    {
+                   String tipoInformado, Integer limiteInformado) {
 
-  if(matriculaInformada == null ||
-  matriculaInformada.isBlank()) {
-      throw new IllegalArgumentException("O nome não pode ser vazio.");
-  }
+        if (matriculaInformada == null ||
+                matriculaInformada.isBlank()) {
+            throw new IllegalArgumentException("O nome não pode ser vazio.");
+        }
         if (tipoInformado == null ||
                 (!tipoInformado.trim().equalsIgnoreCase("ALUNO")
                         && !tipoInformado.trim().equalsIgnoreCase("PROFESSOR"))) {
@@ -53,7 +53,6 @@ public class Usuario {
     public Integer getEmprestimosAtivos() {
         return emprestimosAtivos;
     }
-
     public static boolean nomeValido(String nome) {
         return nome != null && !nome.trim().isEmpty();
     }
@@ -79,8 +78,3 @@ public class Usuario {
         return true;
     }
 }
-
-
-
-
-

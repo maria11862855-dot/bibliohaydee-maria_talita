@@ -18,6 +18,10 @@ public class Livro {
         this.genero = genero;
         this.disponivel = true;
     }
+    public Livro(String titulo, String isbn, Autor autor,
+                 Integer anoDePublicacao) {
+        this(titulo, isbn, autor, anoDePublicacao, "Não informado");
+    }
 
     public String getTitulo() {
         return titulo;

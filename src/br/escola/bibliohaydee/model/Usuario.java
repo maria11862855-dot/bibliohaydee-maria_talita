@@ -14,7 +14,7 @@ public class Usuario {
 
         if (matriculaInformada == null ||
                 matriculaInformada.isBlank()) {
-            throw new IllegalArgumentException("O nome não pode ser vazio.");
+            throw new IllegalArgumentException("A matrícula não pode ser vazia.");
         }
         if (tipoInformado == null ||
                 (!tipoInformado.trim().equalsIgnoreCase("ALUNO")
@@ -53,12 +53,19 @@ public class Usuario {
     public Integer getEmprestimosAtivos() {
         return emprestimosAtivos;
     }
+    public boolean podeEmprestar() {
+        return emprestimosAtivos < limiteEmprestimos;
+    }
+
+    public void registrarEmprestimo() {
+        emprestimosAtivos++;
+    }
     public static boolean nomeValido(String nome) {
         return nome != null && !nome.trim().isEmpty();
     }
 
     public static boolean limiteValido(int limite) {
-        return limite >= 5;
+        return limite >= 1;
     }
     public boolean setNome(String nome) {
         if (!nomeValido(nome)) {

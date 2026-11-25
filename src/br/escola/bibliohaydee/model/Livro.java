@@ -46,6 +46,18 @@ public class Livro {
     public boolean isDisponivel() {
         return disponivel;
     }
+    public boolean emprestar() {
+        if (!disponivel) {
+            return false;
+        }
+
+        disponivel = false;
+        return true;
+    }
+
+    public boolean estaDisponivel() {
+        return disponivel;
+    }
 
     @Override
     public String toString() {

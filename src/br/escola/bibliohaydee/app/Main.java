@@ -2,17 +2,17 @@ package br.escola.bibliohaydee.app;
 import br.escola.bibliohaydee.model.Autor;
 import br.escola.bibliohaydee.model.Livro;
 import br.escola.bibliohaydee.model.Usuario;
+
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Scanner;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
         List<Autor> autores = new ArrayList<>();
         List<Livro> livros = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
 
         Autor autor = new Autor();
         autor.setNome("Machado de Assis");
@@ -28,39 +28,17 @@ public class Main {
                 1899,
                 "Romance"
         );
+        Livro livroSemGenero = new Livro(
+                "Dom Casmurro",
+                "978-85-359-0277-5",
+                autor,
+                1899
+        );
+
+        System.out.println("Gênero do livro: " + livroSemGenero.getGenero());
 
         livros.add(livro);
-        Autor machado = autor;
 
-        Autor graciliano = new Autor();
-        graciliano.setNome("Graciliano Ramos");
-        graciliano.setNacionalidade("Brasileiro");
-        graciliano.setAnoNascimento(1892);
-
-        Autor aluisio = new Autor();
-        aluisio.setNome("Aluísio Azevedo");
-        aluisio.setNacionalidade("Brasileiro");
-        aluisio.setAnoNascimento(1857);
-
-        Autor jorge = new Autor();
-        jorge.setNome("Jorge Amado");
-        jorge.setNacionalidade("Brasileiro");
-        jorge.setAnoNascimento(1912);
-
-        livros.add(new Livro("Memórias Póstumas de Brás Cubas",
-                "978-1", machado, 1881, "Romance"));
-
-        livros.add(new Livro("Quincas Borba",
-                "978-2", machado, 1891, "Romance"));
-
-        livros.add(new Livro("Vidas Secas",
-                "978-3", graciliano, 1938, "Romance"));
-
-        livros.add(new Livro("O Cortiço",
-                "978-4", aluisio, 1890, "Romance"));
-
-        livros.add(new Livro("Capitães da Areia",
-                "978-5", jorge, 1937, "Romance"));
         System.out.println("===== AUTORES =====");
 
         for (Autor a : autores) {
@@ -76,9 +54,8 @@ public class Main {
                 System.out.println(l);
             }
         }
+
         List<Usuario> usuarios = new ArrayList<>();
-
-
         String nome;
 
         do {
@@ -110,11 +87,20 @@ public class Main {
         } while (!tipo.equals("ALUNO")
                 && !tipo.equals("PROFESSOR"));
 
-        System.out.print("Digite o limite de empréstimos: ");
-        Integer limite = Integer.parseInt(scanner.nextLine());
+        System.out.print("Definir o limite? (S/N): ");
+        String resposta = scanner.nextLine().trim().toUpperCase();
 
-        Usuario usuario = new Usuario(
-                nome, matricula, tipo, limite);
+        Usuario usuario;
+
+        if (resposta.equals("S")) {
+            System.out.print("Digite o limite de empréstimos: ");
+            Integer limite = Integer.parseInt(scanner.nextLine());
+
+
+            usuario = new Usuario(nome, matricula, tipo, limite);
+        } else {
+            usuario = new Usuario(nome, matricula, tipo);
+        }
 
         usuarios.add(usuario);
 
@@ -126,140 +112,75 @@ public class Main {
                 + usuario.getLimiteEmprestimos());
         System.out.println("Empréstimos ativos: "
                 + usuario.getEmprestimosAtivos());
-        int opcao;
 
-        do {
-            System.out.println("\n===== BIBLIOTECA HAYDEE =====");
-            System.out.println("1 - Pesquisar por título");
-            System.out.println("2 - Pesquisar por autor");
-            System.out.println("3 - Gerar relatório do acervo");
-            System.out.println("0 - Sair");
-            System.out.print("Escolha uma opção: ");
+        System.out.print("\nDigite a matrícula do usuário que deseja atualizar: ");
+        String matriculaBusca = scanner.nextLine();
 
-            opcao = Integer.parseInt(scanner.nextLine());
+        Usuario usuarioEncontrado = buscarUsuario(usuarios, matriculaBusca);
 
-            switch (opcao) {
-                case 1:
-                    pesquisarPorTitulo(livros, scanner);
-                    break;
+        if (usuarioEncontrado == null) {
+            System.out.println("Usuário não localizado. Nenhuma alteração feita.");
+        } else {
+            System.out.println("\nUsuário encontrado:");
+            System.out.println("Nome: " + usuarioEncontrado.getNome());
+            System.out.println("Matrícula: " + usuarioEncontrado.getMatricula());
+            System.out.println("Tipo: " + usuarioEncontrado.getTipo());
+            System.out.println("Limite: " + usuarioEncontrado.getLimiteEmprestimos());
 
-                case 2:
-                    pesquisarPorAutor(livros, scanner);
-                    break;
+            System.out.println("\nO que deseja atualizar?");
+            System.out.println("1 - Nome");
+            System.out.println("2 - Limite de empréstimos");
+            System.out.print("Escolha: ");
 
-                case 3:
-                    gerarRelatorio(livros);
-                    break;
+            String opcao = scanner.nextLine();
 
-                case 0:
-                    System.out.println("Saindo do sistema...");
-                    break;
+            if (opcao.equals("1")) {
+                System.out.print("Digite o novo nome: ");
+                String novoNome = scanner.nextLine();
 
-                default:
-                    System.out.println("Opção inválida.");
-            }
 
-        } while (opcao != 0);
-
-                scanner.close();
-            }
-    private static void pesquisarPorTitulo(
-            List<Livro> livros, Scanner scanner) {
-
-        System.out.print("Digite parte do título: ");
-        String termo = scanner.nextLine();
-
-        if (termo.isBlank()) {
-            System.out.println("Digite um título válido.");
-            return;
-        }
-
-        termo = termo.trim().toLowerCase();
-
-        boolean encontrou = false;
-
-        for (Livro l : livros) {
-            String titulo = l.getTitulo().trim().toLowerCase();
-
-            if (titulo.contains(termo)) {
-                System.out.println(l);
-                encontrou = true;
-            }
-        }
-
-        if (!encontrou) {
-            System.out.println("Nenhum livro encontrado.");
-        }
-    }
-    private static void pesquisarPorAutor(
-            List<Livro> livros, Scanner scanner) {
-
-        System.out.print("Digite o nome do autor: ");
-        String termo = scanner.nextLine();
-
-        if (termo.isBlank()) {
-            System.out.println("Digite um nome válido.");
-            return;
-        }
-
-        termo = termo.trim().toLowerCase();
-
-        boolean encontrou = false;
-
-        for (Livro l : livros) {
-            String nomeAutor = l.getAutor().getNome()
-                    .trim().toLowerCase();
-
-            boolean corresponde = nomeAutor.equals(termo);
-
-            String[] partesNome = nomeAutor.split("\\s+");
-            for (String parte : partesNome) {
-                if (parte.equals(termo)) {
-                    corresponde = true;
+                if (usuarioEncontrado.setNome(novoNome)) {
+                    System.out.println("Nome atualizado com sucesso!");
+                } else {
+                    System.out.println("Nome inválido. Nenhuma alteração feita.");
                 }
-            }
 
-            if (corresponde) {
-                System.out.println(l);
-                encontrou = true;
+
+            } else if (opcao.equals("2")) {
+                System.out.print("Digite o novo limite: ");
+                String entradaLimite = scanner.nextLine();
+
+
+                try {
+                    int novoLimite = Integer.parseInt(entradaLimite);
+
+
+                    if (usuarioEncontrado.setLimiteEmprestimos(novoLimite)) {
+                        System.out.println("Limite atualizado com sucesso!");
+                    } else {
+                        System.out.println("Limite inválido. Nenhuma alteração feita.");
+                    }
+
+
+                } catch (NumberFormatException e) {
+                    System.out.println("Digite um número válido. Nenhuma alteração feita.");
+                }
+
+
+            } else {
+                System.out.println("Opção inválida. Nenhuma alteração feita.");
             }
         }
 
-        if (!encontrou) {
-            System.out.println("Autor não encontrado.");
-        }
+        scanner.close();
     }
-    private static void gerarRelatorio(List<Livro> livros) {
-        StringBuilder relatorio = new StringBuilder();
-
-        relatorio.append("===== RELATÓRIO DO ACERVO =====\n");
-        if (livros.isEmpty()) {
-            relatorio.append("Não há livros no acervo.\n");
-        }
-        else {
-            for (int i = 0; i < livros.size(); i++) {
-                Livro l = livros.get(i);
-                relatorio.append(i + 1)
-                        .append(" - ")
-                        .append(l.getTitulo())
-                        .append(" | Autor: ")
-                        .append(l.getAutor().getNome())
-                        .append(" | Disponível: ")
-                        .append(l.isDisponivel())
-                        .append("\n");
+    public static Usuario buscarUsuario(List<Usuario> usuarios, String matricula) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getMatricula().equals(matricula)) {
+                return usuario;
             }
-            relatorio.append("Total de livros: ")
-                    .append(livros.size())
-                    .append("\n");
         }
-        System.out.println(relatorio.toString());
+
+        return null;
     }
-        }
-
-
-
-
-
-
-
-
+}
